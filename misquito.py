@@ -13,12 +13,14 @@ final_distances=Counter()
 INITIAL_POPULATION_SIZE=1000 # misquitos
 INITIAL_LIFESPAN=10 # days
 
-#Choices or Possible Actions
+#ACTION (Flying) CHOICES
 class Direction(Enum):
     NORTH=(1,0)
     SOUTH=(-1,0)
+    EAST=(0,1)
+    WEST=(-1,0)
 
-# Agents
+# AGENT
 class Misquito:
     def __init__(self, lifespan_in_days:int,initial_x=0, initial_y=0):
         # INITIAL STATE
