@@ -1,24 +1,5 @@
-"""This code simulates the Ronald Ross algorithm
-of the distance travel by a misquito given the 
-duration of their life.
-
-Author: Ali Akram
-"""
-from random import random, randint
-from enum import Enum
-from collections import Counter
-
-final_position=Counter()
-final_distances=Counter()
-INITIAL_POPULATION_SIZE=1000 # misquitos
-INITIAL_LIFESPAN=10 # days
-
-#ACTION (Flying) CHOICES
-class Direction(Enum):
-    NORTH=(1,0)
-    SOUTH=(-1,0)
-    EAST=(0,1)
-    WEST=(-1,0)
+from actions import Directions
+from random import randint
 
 # AGENT
 class Misquito:
@@ -35,10 +16,10 @@ class Misquito:
         
         # POSSIBLE ACTIONS
         ACTIONS={"fly"}
-        self.choices = [dir for dir in Direction]
+        self.choices = [dir for dir in Directions]
     def get_position(self):
         """get position of the misquito at current state"""        
-        return (self.x, self.y)
+        return self.x, self.y
     def get_distance_travelled(self):
         """see the distance misquito has travelled since initial state"""        
         delta_x = self.x - self.initial_x
@@ -68,23 +49,3 @@ class MisquitoFactory:
         print(f"Created a population of {number_of_misquitos} with a life_span of {life_span}")
     def get_misquitos(self):
         return self.Misquitos
-
-
-if __name__ == "__main__":
-    # Generate the inital population of misquitos
-    m_factory = MisquitoFactory(number_of_misquitos=INITIAL_POPULATION_SIZE,life_span=INITIAL_LIFESPAN)
-    Misquitos = m_factory.get_misquitos()
-    
-    # Simulate the misquitos traveling through and environment
-    for m in Misquitos:
-        while m.is_alive():
-            m.fly()
-        final_position[m.get_position()]+=1
-        # print(f"Misquito died at {m.get_position()}")
-    
-    final_distances=[]
-    for m in Misquitos:
-        final_distances.append(m.get_distance_travelled())
-    
-    avg_distance = sum(final_distances)/len(final_distances)
-    print(f'Average distance travelled: {avg_distance}')
