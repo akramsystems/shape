@@ -1,4 +1,6 @@
-from actions import Directions
+from abc import ABC
+from typing import List
+from actions import Action, Direction
 from random import randint
 
 # AGENT
@@ -16,7 +18,7 @@ class Misquito:
         
         # POSSIBLE ACTIONS
         ACTIONS={"fly"}
-        self.choices = [dir for dir in Directions]
+        self.choices = [dir for dir in Direction]
     def get_position(self):
         """get position of the misquito at current state"""        
         return self.x, self.y
@@ -49,3 +51,27 @@ class MisquitoFactory:
         print(f"Created a population of {number_of_misquitos} with a life_span of {life_span}")
     def get_misquitos(self):
         return self.Misquitos
+
+
+class State:
+    def __init__(self, x=0, y=0, lifespan=0):        
+        self.x=x
+        self.y=y
+        self.lifespan=lifespan
+
+class Agent(ABC):
+    def __init__(self, name: str, actions: List[Action], initial_state: State = None):
+        self.name = name # each agent should have a name
+        self.actions = actions # each agent has a set of actions
+        self.state = initial_state if initial_state else State() # each agent should be given an initial state
+        self.history = [initial_state]
+    def choose_action(self):
+        """The agent should choose an action to pursue
+        """        
+        raise NotImplementedError
+    def run(self):
+        while self.state.lifespan > 0:
+            action = self.choose_action() # agent first has to choose an action
+            action.execute(self.state) # after they plan out the action they will execute it
+            self.history.append(self.state) # add the current state to the history of our agent
+            self.state.lifespan -= 1
